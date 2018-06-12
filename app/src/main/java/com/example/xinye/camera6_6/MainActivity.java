@@ -17,7 +17,6 @@ import android.media.Image;
 import android.media.ImageReader;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -61,12 +60,8 @@ public class MainActivity extends AppCompatActivity {
     Handler mTimeHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 0) {
-//                textView_result.setText("woshi :" + pictureId);
-                pictureId ++ ;
                 takePicture();
-//                String takepicinfo = ownTakePic(mImageReader);
-
-                sendEmptyMessageDelayed(0, 1000);
+                sendEmptyMessageDelayed(0, 500);
             }
         }
     };
@@ -139,9 +134,10 @@ public class MainActivity extends AppCompatActivity {
         try{
             // 后置摄像头ID
             mCameraId = "" + CameraCharacteristics.LENS_FACING_FRONT;
+
             // mImageReader 是 ImageReader 对象，这里进行实例化，传入surfaceview的大小
             mImageReader = ImageReader.newInstance(SurfaceView_preview.getWidth(),
-                    SurfaceView_preview.getHeight(), ImageFormat.JPEG,27);
+                    SurfaceView_preview.getHeight(), ImageFormat.JPEG, 31);
             // 设置 ImageReader 的图片监听，
             mImageReader.setOnImageAvailableListener(mOnImageAvailableListener, null);
 
@@ -183,11 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap resizedBitmap =  zoomBitmap(bitmap, 64,64) ;
                 bytes = Bitmap2Bytes(resizedBitmap) ;
                 img_64.setImageBitmap(bitmap);
-//                String res = "";
-//
-//                for (int i = 0; i<bytes.length;i++){
-//                    res =res +  (bytes[i]+128) + "*";
-//                }
+
                 int width = resizedBitmap.getWidth();
                 int heigth = resizedBitmap.getHeight();
 //                textView_result.setText("woshi :" + res);
@@ -213,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
           }
         }
     };
@@ -260,7 +251,6 @@ public class MainActivity extends AppCompatActivity {
         public void onOpened(@NonNull CameraDevice cameraDevice) {
             mCameraDevice = cameraDevice;
             try{
-
                 Log.d("################ 4", "camera onOpened and then to takePreview!");
                 takePreview();
                 Toast.makeText(MainActivity.this,"打开摄像头成功", Toast.LENGTH_LONG).show();
@@ -301,14 +291,6 @@ public class MainActivity extends AppCompatActivity {
                 mImageReader.getSurface()),
                 mSessionPreviewStateCallback,
                 null);
-        //************************* 做算法，检测
-//        mImageReader.setOnImageAvailableListener(doDetective,mHandler);
-
-
-//        Bitmap bitmap1 = SurfaceView_preview.getDrawingCache();
-//        Log.d("################ 5 ", "bitmap from surfaceview!");
-//        img_64.setImageBitmap(bitmap1);
-
     }
 
 
@@ -408,9 +390,6 @@ public class MainActivity extends AppCompatActivity {
 
         return jpegOrientation;
     }
-
-
-
 
 
 }
